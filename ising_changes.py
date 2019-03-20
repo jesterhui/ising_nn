@@ -1,8 +1,24 @@
+"""Class for creating and updating 2d Ising model.
+
+"""
 import matplotlib.pyplot as plt
 import numpy as np
 
 class Ising:
+    """2D Ising model.
+
+    Attributes:
+        lattice (obj): (size, size) NumPy array containing spin values.
+        size (int): Lattice size.
+        temp (float): Temperature.
+
+    """
     def __init__(self, T, size):
+        """Pass initial settings (T, size) to class.
+        Args:
+            temp (float): Temperature.
+            size (int): Lattice size.
+        """
         self.lattice = (2 * np.random.randint(low=0, high=2, size=(size, size))
                         - 1)
         self.size = size
@@ -10,11 +26,20 @@ class Ising:
 
 
     def visualize(self):
+        """Visualize and display lattice.
+
+        """
         plt.imshow(self.lattice, cmap='Greys')
         plt.show()
 
     def get_h(self, lattice):
-        h = 0
+        """Evaluate Ising spin hamiltonian for lattice.
+
+        Returns:
+            float: Energy evaluation.
+
+        """
+        hamiltonian = 0
         ss = self.size
         for i in range(ss):
             for j in range(ss):
@@ -43,16 +68,26 @@ class Ising:
                     up = lattice[i, j] * lattice[i, ss-1]
                 else:
                     up = lattice[i, j] * lattice[i, j - 1]
-                h += -1 * float(up + down + left + right)
-        h = float(h)
-        return h
+                hamiltonian += -1 * float(up + down + left + right)
+        hamiltonian = float(hamiltonian)
+        return hamiltonian
 
 
     def get_m(self):
-        m = np.sum(self.lattice)
-        return m
+        """Evaluate lattice magnetization.
 
-    def update_lattice(self):
+        Returns:
+            float: Magnetization evaluation.
+
+        """
+        mag = np.sum(self.lattice)
+        mag = float(mag)
+        return mag
+
+    def metropolis_update(self):
+        """Perform single Metropolis-Hastings update step.
+
+        """
         ss = self.size
         ind = np.random.randint(low=0, high=ss, size=(2, 1))
         #new_lattice = self.lattice.copy() #We don't use this anywhere if I understand correctly
@@ -106,8 +141,14 @@ class Ising:
             self.lattice[i, j] = -self.lattice[i, j]
 
     def run(self, iterations):
+        """Run Metropolis-Hastings Monte Carlo.
+
+        Args:
+            iterations (int): Number of update steps to perform.
+
+        """
         for i in range(iterations):
-            self.update_lattice()
+            self.metropolis_update()
 
 r = Ising(2.27, 16)
 r.visualize()
