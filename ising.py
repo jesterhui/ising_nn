@@ -25,11 +25,19 @@ class Ising:
         self.size = size
         self.temp = temp
 
-    def visualize(self):
+    def visualize(self, path=None):
         """Visualize and display lattice.
+
+        Args:
+            path (str): Path to save image to.
+
+        Returns:
+            type: Description of returned object.
 
         """
         plt.imshow(self.lattice, cmap='Greys')
+        if path is not None:
+            plt.savefig(path, dpi=400)
         plt.show()
 
     def get_h(self):
@@ -109,7 +117,7 @@ class Ising:
             self.metropolis_update()
 
 
-R = Ising(2.27, 16)
+R = Ising(10, 16)
 R.visualize()
 R.run(10000)
-R.visualize()
+R.visualize('images/progress_update_high_temp.png')
