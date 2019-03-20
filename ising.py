@@ -1,77 +1,115 @@
+"""Class for creating and updating 2d Ising model.
+
+"""
 import matplotlib.pyplot as plt
 import numpy as np
 
+
 class Ising:
-    def __init__(self, T, size):
+    """2D Ising model.
+
+    Attributes:
+        lattice (obj): (size, size) NumPy array containing spin values.
+        size (int): Lattice size.
+        temp (float): Temperature.
+
+    """
+    def __init__(self, temp, size):
+        """Pass initial settings (T, size) to class.
+        Args:
+            temp (float): Temperature.
+            size (int): Lattice size.
+        """
         self.lattice = (2 * np.random.randint(low=0, high=2, size=(size, size))
                         - 1)
         self.size = size
-        self.T = T
-
+        self.temp = temp
 
     def visualize(self):
+        """Visualize and display lattice.
+
+        """
         plt.imshow(self.lattice, cmap='Greys')
         plt.show()
 
-    def get_h(self, lattice):
-        h = 0
+    def get_h(self):
+        """Evaluate Ising spin hamiltonian for lattice.
+
+        Returns:
+            float: Energy evaluation.
+
+        """
+        hamiltonian = 0
         for i in range(self.size):
             for j in range(self.size):
                 try:
-                    right = lattice[i, j] * lattice[i + 1, j]
+                    right = self.lattice[i, j] * self.lattice[i + 1, j]
                 except IndexError:
-                    right = lattice[i, j] * lattice[0, j]
-                left = lattice[i, j] * lattice[i - 1, j]
+                    right = self.lattice[i, j] * self.lattice[0, j]
+                left = self.lattice[i, j] * self.lattice[i - 1, j]
                 try:
-                    down = lattice[i, j] * lattice[i, j + 1]
+                    below = self.lattice[i, j] * self.lattice[i, j + 1]
                 except IndexError:
-                    down = lattice[i, j] * lattice[i, 0]
-                up = lattice[i, j] * lattice[i, j - 1]
-                h += -1 * float(up + down + left + right)
-        h = float(h)
-        return h
-
+                    below = self.lattice[i, j] * self.lattice[i, 0]
+                above = self.lattice[i, j] * self.lattice[i, j - 1]
+                hamiltonian += -1 * float(above + below + left + right)
+        hamiltonian = float(hamiltonian)
+        return hamiltonian
 
     def get_m(self):
-        m = np.sum(self.lattice)
-        return m
+        """Evaluate lattice magnetization.
 
-    def update_lattice(self):
+        Returns:
+            float: Magnetization evaluation.
+
+        """
+        mag = np.sum(self.lattice)
+        mag = float(mag)
+        return mag
+
+    def metropolis_update(self):
+        """Perform single Metropolis-Hastings update step.
+
+        """
         ind = np.random.randint(low=0, high=self.size, size=(2, 1))
-        new_lattice = self.lattice.copy()
 
         i = ind[0, 0]
-        j= ind[1, 0]
+        j = ind[1, 0]
 
-        print(i, j)
         try:
             right = self.lattice[i, j] * self.lattice[i + 1, j]
         except IndexError:
             right = self.lattice[i, j] * self.lattice[0, j]
         left = self.lattice[i, j] * self.lattice[i - 1, j]
         try:
-            down = self.lattice[i, j] * self.lattice[i, j + 1]
+            below = self.lattice[i, j] * self.lattice[i, j + 1]
         except IndexError:
-            down = self.lattice[i, j] * self.lattice[i, 0]
-        up = self.lattice[i, j] * self.lattice[i, j - 1]
-        delta_e = 2 * float(up + down + left + right)
+            below = self.lattice[i, j] * self.lattice[i, 0]
+        above = self.lattice[i, j] * self.lattice[i, j - 1]
+        delta_e = 2 * float(above + below + left + right)
         accept = None
         if delta_e <= 0:
             accept = True
-        elif np.random.random() < np.exp(-delta_e / (self.T)):
+        elif np.random.random() < np.exp(-delta_e / (self.temp)):
             accept = True
         else:
             accept = False
-        print(i, j)
         if accept is True:
             print(self.lattice[i, j])
             self.lattice[i, j] = -self.lattice[i, j]
 
     def run(self, iterations):
-        for i in range(iterations):
-            self.update_lattice()
+        """Run Metropolis-Hastings Monte Carlo.
 
-r = Ising(2.27, 16)
-r.visualize()
-r.run(10000)
-r.visualize()
+        Args:
+            iterations (int): Number of update steps to perform.
+
+        """
+        for _ in range(iterations):
+            self.metropolis_update()
+
+
+R = Ising(2.27, 16)
+R.visualize()
+R.run(10000)
+R.visualize()
