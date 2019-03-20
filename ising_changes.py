@@ -55,7 +55,7 @@ class Ising:
                     left = lattice[i, j] * lattice[ss-1, j]
                 else:
                     left = lattice[i, j] * lattice[i - 1, j]
-                    
+
                 if j == ss-1:
                     down = lattice[i, j] * lattice[i, 0]
                 else:
@@ -101,38 +101,38 @@ class Ising:
             right = self.lattice[i, j] * self.lattice[0, j]
         else:
             right = self.lattice[i, j] * self.lattice[i + 1, j]
-            
-            
+
+
         #try:
         #    right = self.lattice[i, j] * self.lattice[i + 1, j]
         #except IndexError:
         #    right = self.lattice[i, j] * self.lattice[0, j]
-        
-        
+
+
         if i == 0:
             left = self.lattice[i, j] * self.lattice[ss-1, j]
-        else: 
+        else:
             left = self.lattice[i, j] * self.lattice[i - 1, j]
-            
-            
+
+
         if j == ss-1:
             down = self.lattice[i, j] * self.lattice[i, 0]
         else:
             down = self.lattice[i, j] * self.lattice[i, j + 1]
-            
-            
+
+
         #try:
         #    down = self.lattice[i, j] * self.lattice[i, j + 1]
         #except IndexError:
         #    down = self.lattice[i, j] * self.lattice[i, 0]
-        
-        
+
+
         if j == 0:
             up = self.lattice[i, j] * self.lattice[i, ss-1]
         else:
             up = self.lattice[i, j] * self.lattice[i, j - 1]
-            
-            
+
+
         delta_e = 2 * float(up + down + left + right)
         #accept = None
         print(i, j)
