@@ -16,6 +16,7 @@ class Ising:
     """
     def __init__(self, temp, size):
         """Pass initial settings (T, size) to class.
+
         Args:
             temp (float): Temperature.
             size (int): Lattice size.
@@ -25,20 +26,17 @@ class Ising:
         self.size = size
         self.temp = temp
 
-
     def visualize(self, path=None):
         """Visualize and display lattice.
 
         Args:
             path (str): Path to save image to.
 
-
         """
         plt.imshow(self.lattice, cmap='Greys')
         if path is not None:
             plt.savefig(path, dpi=400, bbox_inches='tight')
         plt.show()
-
 
     def get_h(self):
         """Evaluate Ising spin hamiltonian for lattice.
@@ -65,7 +63,6 @@ class Ising:
         hamiltonian = float(hamiltonian)
         return hamiltonian
 
-
     def get_m(self):
         """Evaluate lattice magnetization.
 
@@ -76,7 +73,6 @@ class Ising:
         mag = np.sum(self.lattice)
         mag = float(mag)
         return mag
-
 
     def metropolis_update(self):
         """Perform single Metropolis-Hastings update step.
@@ -102,7 +98,6 @@ class Ising:
         if delta_e <= 0 or np.random.random() < np.exp(-delta_e / (self.temp)):
             self.lattice[i, j] = -self.lattice[i, j]
 
-
     def wolff_update(self):
         """Perform Wolff cluster update step.
 
@@ -115,7 +110,6 @@ class Ising:
 
         root = (i,j)
         self.build_cluster(root, self.lattice[root])
-
 
     def build_cluster(self, site, spin):
         """Build cluster of sites for Wolff update and flips them through recursive call.
@@ -153,14 +147,13 @@ class Ising:
                 if np.random.random() < 1 - np.exp(-2.0/self.temp):
                     self.build_cluster(next_site, spin)  # recursively call build_cluster for new sites
 
-
     def run(self, iterations):
         """Run Markov Chain Monte Carlo.
 
         Args:
             iterations (int): Number of Monte Carlo steps to perform.
-            One Monte Carlo steps includes N Metropolis updates and one Wolff update,
-            where N is the number of lattice sites.
+            One Monte Carlo steps includes N Metropolis updates and one Wolff
+            update, where N is the number of lattice sites.
 
         """
         sites = (self.size)**2
@@ -174,4 +167,4 @@ class Ising:
 R = Ising(2.7, 16)
 R.visualize()
 R.run(40)
-R.visualize(images/wolff_crit_temp.png)
+R.visualize(images / wolff_crit_temp.png)
