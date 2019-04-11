@@ -14,12 +14,14 @@ class Ising:
         temp (float): Temperature.
 
     """
+
     def __init__(self, temp, size):
         """Pass initial settings (T, size) to class.
 
         Args:
             temp (float): Temperature.
             size (int): Lattice size.
+
         """
         self.lattice = (2 * np.random.randint(low=0, high=2, size=(size, size))
                         - 1)
@@ -112,7 +114,8 @@ class Ising:
         self.build_cluster(root, self.lattice[root])
 
     def build_cluster(self, site, spin):
-        """Build cluster of sites for Wolff update and flips them through recursive call.
+        """Build cluster of sites for Wolff update and flips them through
+        recursive call.
 
         Args:
             site (tuple): growing point for cluster.
@@ -167,4 +170,4 @@ class Ising:
 R = Ising(2.7, 16)
 R.visualize()
 R.run(40)
-R.visualize(images / wolff_crit_temp.png)
+R.visualize()
