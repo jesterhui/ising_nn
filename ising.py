@@ -174,4 +174,4 @@ class Ising:
 R = Ising(2.7, 16)
 R.visualize()
 R.run(40)
-R.visualize(images/wolff_crit_temp.png)
+R.visualize()
