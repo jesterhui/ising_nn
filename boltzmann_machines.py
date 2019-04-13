@@ -153,31 +153,7 @@ class RestrictedBoltzmannMachine:
                            / batch_size) + self.eta * momentum)
                 self.weights += update
                 momentum = update
-                """
-            # monitor training progress
-            if (epoch + 1) % 5 == 0:
-                _, visible_values = self.gibbs(x.T)
 
-                for ___ in range(k - 1):
-                    (visible_activations,
-                     visible_values) = self.gibbs(visible_values)
-                fig, ax = plt.subplots(1, 2)
-                ax.ravel()[0].imshow(x[0, 1:].reshape((28, 28)), cmap='Greys')
-                ax.ravel()[0].set_title('Original Digit')
-                ax.ravel()[1].imshow(visible_values[1:, 0]
-                                     .reshape((28, 28)), cmap='Greys')
-                ax.ravel()[1].set_title('Generated Digit')
-                for i in range(2):
-                    ax.ravel()[i].set_xticks([])
-                    ax.ravel()[i].set_yticks([])
-                plt.tight_layout()
-                plt.savefig('images/visualize_{}epochs.png'.format(epoch
-                                                                   + 1),
-                            dpi=400, bbox_inches='tight')
-                plt.close()
-                error = self.reconstruction_error(x, visible_activations)
-                print(error)
-                """
     @staticmethod
     def sigmoid(z):
         """Sigmoid utility.
