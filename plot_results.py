@@ -51,6 +51,27 @@ for temp in np.linspace(1.0, 3.5, 26):
     DBN = get_energies(DBN_DATA)
     DBN_AVERAGE.append(np.mean(DBN))
     DBN_C.append((np.mean(DBN ** 2) - np.mean(DBN) ** 2) / (temp ** 2))
+    if temp == 2:
+        FIG, AX = plt.subplots(1, 3, figsize=(6.5, 2))
+        AX[0].hist(MONTE_CARLO, color='k', label='Monte Carlo')
+        AX[0].set_title('Monte Carlo')
+        AX[0].set_xlabel('Energy')
+        AX[1].hist(RBN, color='#e41a1c',
+                   label='Restricted Boltzmann Machine')
+        AX[1].set_title('RBN')
+        AX[1].set_xlabel('Energy')
+        AX[2].hist(DBN, color='#377eb8', label='Deep Belief Network')
+        AX[2].set_title('Deep Belief Network')
+        AX[2].set_xlabel('Energy')
+        for i in range(3):
+            plt.setp(AX[i].spines.values(), linewidth=3, zorder=30)
+            AX[i].tick_params(axis='both', width=2, direction='in', pad=5)
+            AX[i].set_xlim(-275, 0)
+            AX[i].set_ylim(0, 3500)
+        plt.tight_layout()
+        plt.savefig('images/histograms.png', dpi=400,
+                    bbox_inches='tight')
+        plt.show()
 FIG, AX = plt.subplots()
 plt.plot(np.linspace(1.0, 3.5, 26), MONTE_CARLO_AVERAGE, linewidth=1.5,
          color='k', label='Monte Carlo')
