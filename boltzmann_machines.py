@@ -124,8 +124,6 @@ class RestrictedBoltzmannMachine:
 
         # begin training loop
         for epoch in range(epochs):
-            print(epoch)
-
             np.random.shuffle(x)
             for i in range(n_batches):
                 # slice training batch

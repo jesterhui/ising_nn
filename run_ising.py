@@ -1,16 +1,16 @@
 import numpy as np
 from ising import Ising
 
-datapoints = 10000
-size = 8
+DATA_POINTS = 10000
+SIZE = 8
 
 for temp in np.linspace(1.0, 3.5, 26):
-    data = np.zeros(shape=(datapoints, size ** 2))
-    R = Ising(temp, size)
+    data = np.zeros(shape=(DATA_POINTS, SIZE ** 2))
+    R = Ising(temp, SIZE)
     R.run(32 ** 3)
     print('T = {} equilibration done'.format(temp))
-    for i in range(datapoints):
-        R = Ising(temp, size)
+    for i in range(DATA_POINTS):
+        R = Ising(temp, SIZE)
         R.run(32)
         data[i] = R.generate_data()
     np.save('data/train_temp_%g' % (temp), data)
