@@ -27,7 +27,6 @@ class Ising:
         self.size = size
         self.temp = temp
 
-
     def visualize(self, path=None):
         """Visualize and display lattice.
 
@@ -40,7 +39,6 @@ class Ising:
         if path is not None:
             plt.savefig(path, dpi=400, bbox_inches='tight')
         plt.show()
-
 
     def get_h(self):
         """Evaluate Ising spin hamiltonian for lattice.
@@ -67,7 +65,6 @@ class Ising:
         hamiltonian = float(hamiltonian)
         return hamiltonian
 
-
     def get_m(self):
         """Evaluate lattice magnetization.
 
@@ -78,7 +75,6 @@ class Ising:
         mag = np.sum(self.lattice)
         mag = float(mag)
         return mag
-
 
     def metropolis_update(self):
         """Perform single Metropolis-Hastings update step.
@@ -104,7 +100,6 @@ class Ising:
         if delta_e <= 0 or np.random.random() < np.exp(-delta_e / (self.temp)):
             self.lattice[i, j] = -self.lattice[i, j]
 
-
     def wolff_update(self):
         """Perform Wolff cluster update step.
 
@@ -116,7 +111,6 @@ class Ising:
 
         root = (i,j)
         self.build_cluster(root, self.lattice[root])
-
 
     def build_cluster(self, site, spin):
         """Build cluster of sites for Wolff update and flips them through
@@ -155,7 +149,6 @@ class Ising:
                 if np.random.random() < 1 - np.exp(-2.0/self.temp):
                     self.build_cluster(next_site, spin)
 
-
     def run(self, iterations):
         """Run Markov Chain Monte Carlo.
 
@@ -165,13 +158,12 @@ class Ising:
             Wolff update, where N is the number of lattice sites.
 
         """
-        sites = (self.size)**2
+        sites = self.size ** 2
 
         for ii in range(iterations):
             for _ in range(sites):
                 self.metropolis_update()
             self.wolff_update()
-
 
     def generate_data(self):
         """Generate data in format for boltzmann_machines.py
@@ -182,17 +174,5 @@ class Ising:
 
         """
 
-        data = (self.lattice.flatten() + 1)/2
+        data = (self.lattice.flatten() + 1) / 2
         return data
-
-
-datapoints = 100
-size = 8
-
-for temp in np.linspace(1.0,3.5,26):
-    data = np.zeros(shape=(datapoints, size**2))
-    for i in range(datapoints):
-        R = Ising(temp, size)
-        R.run(40)
-        data[i] = R.generate_data()
-    np.save('data/train_temp_%g' % (temp), data)
