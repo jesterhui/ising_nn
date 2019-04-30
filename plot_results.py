@@ -53,15 +53,15 @@ for temp in np.linspace(1.0, 3.5, 26):
     DBN_C.append((np.mean(DBN ** 2) - np.mean(DBN) ** 2) / (temp ** 2))
     if temp == 2:
         FIG, AX = plt.subplots(1, 3, figsize=(6.5, 2))
-        AX[0].hist(MONTE_CARLO, color='k', label='Monte Carlo')
-        AX[0].set_title('Monte Carlo')
+        AX[0].hist(MONTE_CARLO, color='k', label='MC')
+        AX[0].set_title('MC')
         AX[0].set_xlabel('Energy')
         AX[1].hist(RBN, color='#e41a1c',
                    label='Restricted Boltzmann Machine')
-        AX[1].set_title('RBN')
+        AX[1].set_title('RBM')
         AX[1].set_xlabel('Energy')
         AX[2].hist(DBN, color='#377eb8', label='Deep Belief Network')
-        AX[2].set_title('Deep Belief Network')
+        AX[2].set_title('DBN')
         AX[2].set_xlabel('Energy')
         for i in range(3):
             plt.setp(AX[i].spines.values(), linewidth=3, zorder=30)
